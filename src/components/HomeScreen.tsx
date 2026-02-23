@@ -26,7 +26,7 @@ export default function HomeScreen({ today, progress, dailyGoal, onAddWater }: H
   }, [onAddWater]);
 
   return (
-    <div className="flex flex-col items-center justify-center flex-1 px-6 pb-24 pt-16 md:pb-28 md:pt-20 min-h-[calc(100vh-80px)]">
+    <div className="flex flex-col items-center justify-center flex-1 px-6 pb-24 md:pb-28 min-h-screen">
       {/* Progress Ring */}
       <div className="relative flex items-center justify-center mb-6 md:mb-10">
         <ProgressRing progress={progress} size={260} mdSize={340} />
