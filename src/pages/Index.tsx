@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSettings, useWaterLog } from '@/hooks/useWaterTracker';
+import { useWaterReminder } from '@/hooks/useWaterReminder';
 import HomeScreen from '@/components/HomeScreen';
 import HistoryScreen from '@/components/HistoryScreen';
 import SettingsScreen from '@/components/SettingsScreen';
@@ -11,6 +12,7 @@ const Index = () => {
   const [tab, setTab] = useState<Tab>('home');
   const { settings, updateSettings } = useSettings();
   const { today, progress, addWater, resetToday, getLastNDays, getStreak, getDayLog, history } = useWaterLog(settings.dailyGoal);
+  useWaterReminder(settings, today.total, settings.dailyGoal);
 
   return (
     <div className="max-w-md mx-auto min-h-screen bg-background relative overflow-hidden">

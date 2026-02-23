@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react';
 import { type Settings } from '@/hooks/useWaterTracker';
+import { Bell, BellOff } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -28,6 +30,58 @@ const REMINDER_OPTIONS = [
   { value: '3h', label: 'Every 3 hours' },
   { value: 'off', label: 'Off' },
 ];
+
+function NotificationCard() {
+  const [permission, setPermission] = useState<NotificationPermission>(
+    'Notification' in window ? Notification.permission : 'denied'
+  );
+
+  const handleEnable = async () => {
+    if (!('Notification' in window)) return;
+    const result = await Notification.requestPermission();
+    setPermission(result);
+    if (result === 'granted') {
+      new Notification('HydroDay 💧', {
+        body: 'Reminders are now enabled!',
+        icon: '/favicon.ico',
+      });
+    }
+  };
+
+  const granted = permission === 'granted';
+  const denied = permission === 'denied';
+
+  return (
+    <div className="glass-surface rounded-2xl p-5 mb-4">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          {granted ? (
+            <Bell className="w-5 h-5 text-primary" />
+          ) : (
+            <BellOff className="w-5 h-5 text-muted-foreground" />
+          )}
+          <div>
+            <span className="text-sm font-medium text-foreground">Notifications</span>
+            <p className="text-[10px] text-muted-foreground">
+              {granted ? 'Enabled' : denied ? 'Blocked in browser' : 'Not enabled'}
+            </p>
+          </div>
+        </div>
+        {!granted && !denied && (
+          <button
+            onClick={handleEnable}
+            className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-medium tap-bounce"
+          >
+            Enable
+          </button>
+        )}
+        {granted && (
+          <span className="text-xs text-success font-medium">Active ✓</span>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export default function SettingsScreen({ settings, onUpdate, onResetToday }: SettingsScreenProps) {
   return (
@@ -70,6 +124,9 @@ export default function SettingsScreen({ settings, onUpdate, onResetToday }: Set
           </Select>
         </div>
       </div>
+
+      {/* Notifications */}
+      <NotificationCard />
 
       {/* Reminder */}
       <div className="glass-surface rounded-2xl p-5 mb-4">
