@@ -34,7 +34,7 @@ export default function ProgressRing({ progress, size = 260, strokeWidth = 14 }:
   }, [progress]);
 
   return (
-    <svg width={size} height={size} className="transform -rotate-90">
+    <svg width={size} height={size} className="transform -rotate-90" style={{ overflow: 'visible' }}>
       {/* Track */}
       <circle
         cx={size / 2}
