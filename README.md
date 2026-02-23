@@ -1,3 +1,13 @@
+# HydroDay - Stay Hydrated | Support
+
+For any questions, issues, or feedback, please contact us:
+
+📧 Email: timgicu@gmail.com
+
+Thank you for using HydroDay!
+
+
+
 # Welcome to your Lovable project
 
 ## Project info
