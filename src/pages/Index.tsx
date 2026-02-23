@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSettings, useWaterLog } from '@/hooks/useWaterTracker';
 import HomeScreen from '@/components/HomeScreen';
 import HistoryScreen from '@/components/HistoryScreen';
