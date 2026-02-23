@@ -15,7 +15,7 @@ const Index = () => {
   useWaterReminder(settings, today.total, settings.dailyGoal);
 
   return (
-    <div className="max-w-md md:max-w-[500px] mx-auto min-h-screen bg-background relative overflow-hidden">
+    <div className="max-w-md md:max-w-[550px] mx-auto min-h-screen bg-background relative overflow-hidden">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-40 px-5 pt-12 pb-3 max-w-md md:max-w-[500px] mx-auto">
         <h2 className="text-lg md:text-xl font-bold text-foreground tracking-tight">
