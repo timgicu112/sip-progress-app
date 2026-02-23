@@ -96,12 +96,12 @@ export default function HomeScreen({ today, progress, dailyGoal, onAddWater }: H
         </>
       ) : (
         /* iPad: Single row of action buttons */
-        <div className="flex gap-4 mt-2">
+        <div className="flex gap-3 mt-2 w-full max-w-[480px]">
           {QUICK_AMOUNTS.map(amount => (
             <button
               key={amount}
               onClick={() => handleAdd(amount)}
-              className={`flex items-center gap-2 px-7 py-4 rounded-2xl bg-primary/15 text-primary text-base font-semibold shadow-sm hover:bg-primary/25 active:scale-90 transition-all duration-200 ${tappedAmount === amount ? 'animate-bounce-in' : ''}`}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-4 rounded-2xl bg-primary/15 text-primary text-base font-semibold shadow-sm hover:bg-primary/25 active:scale-90 transition-all duration-200 ${tappedAmount === amount ? 'animate-bounce-in' : ''}`}
             >
               <Plus className="w-4 h-4" />
               {amount}ml
