@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
 import ProgressRing from '@/components/ProgressRing';
 import { getMotivationalMessage, type DayLog } from '@/hooks/useWaterTracker';
-import { Droplets } from 'lucide-react';
+import { Droplets, Plus } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface HomeScreenProps {
   today: DayLog;
@@ -15,6 +16,8 @@ const QUICK_AMOUNTS = [150, 250, 500, 750];
 export default function HomeScreen({ today, progress, dailyGoal, onAddWater }: HomeScreenProps) {
   const [bouncing, setBouncing] = useState(false);
   const [rippleKey, setRippleKey] = useState(0);
+  const [tappedAmount, setTappedAmount] = useState<number | null>(null);
+  const isMobile = useIsMobile();
   const glasses = today.entries.length;
   const message = getMotivationalMessage(progress);
 
@@ -22,7 +25,9 @@ export default function HomeScreen({ today, progress, dailyGoal, onAddWater }: H
     onAddWater(amount);
     setBouncing(true);
     setRippleKey(k => k + 1);
+    setTappedAmount(amount);
     setTimeout(() => setBouncing(false), 300);
+    setTimeout(() => setTappedAmount(null), 300);
   }, [onAddWater]);
 
   return (
@@ -61,34 +66,49 @@ export default function HomeScreen({ today, progress, dailyGoal, onAddWater }: H
         </div>
       )}
 
-      {/* Main add button */}
-      <div className="relative mb-6 md:mb-8">
-        {/* Ripple */}
-        <div
-          key={rippleKey}
-          className={rippleKey > 0 ? 'absolute inset-0 rounded-full bg-primary/20 animate-ripple' : 'hidden'}
-        />
-        <button
-          onClick={() => handleAdd(250)}
-          className="relative w-20 h-20 md:w-24 md:h-24 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-3xl md:text-4xl font-light shadow-lg shadow-primary/30 tap-bounce active:shadow-primary/50 transition-shadow"
-        >
-          +
-        </button>
-      </div>
-      <span className="text-xs md:text-sm text-muted-foreground mb-6 md:mb-8">250 ml</span>
-
-      {/* Quick add buttons */}
-      <div className="flex gap-3 md:gap-4">
-        {QUICK_AMOUNTS.map(amount => (
-          <button
-            key={amount}
-            onClick={() => handleAdd(amount)}
-            className="px-4 py-2.5 md:px-6 md:py-3.5 rounded-xl bg-muted text-foreground text-sm md:text-base font-medium tap-bounce hover:bg-muted/80 transition-colors"
-          >
-            {amount}ml
-          </button>
-        ))}
-      </div>
+      {/* Mobile: Main add button + quick amounts */}
+      {isMobile ? (
+        <>
+          <div className="relative mb-6">
+            <div
+              key={rippleKey}
+              className={rippleKey > 0 ? 'absolute inset-0 rounded-full bg-primary/20 animate-ripple' : 'hidden'}
+            />
+            <button
+              onClick={() => handleAdd(250)}
+              className="relative w-20 h-20 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-3xl font-light shadow-lg shadow-primary/30 tap-bounce active:shadow-primary/50 transition-shadow"
+            >
+              +
+            </button>
+          </div>
+          <span className="text-xs text-muted-foreground mb-6">250 ml</span>
+          <div className="flex gap-3">
+            {QUICK_AMOUNTS.map(amount => (
+              <button
+                key={amount}
+                onClick={() => handleAdd(amount)}
+                className="px-4 py-2.5 rounded-xl bg-muted text-foreground text-sm font-medium tap-bounce hover:bg-muted/80 transition-colors"
+              >
+                {amount}ml
+              </button>
+            ))}
+          </div>
+        </>
+      ) : (
+        /* iPad: Single row of action buttons */
+        <div className="flex gap-4 mt-2">
+          {QUICK_AMOUNTS.map(amount => (
+            <button
+              key={amount}
+              onClick={() => handleAdd(amount)}
+              className={`flex items-center gap-2 px-7 py-4 rounded-2xl bg-primary/15 text-primary text-base font-semibold shadow-sm hover:bg-primary/25 active:scale-90 transition-all duration-200 ${tappedAmount === amount ? 'animate-bounce-in' : ''}`}
+            >
+              <Plus className="w-4 h-4" />
+              {amount}ml
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
